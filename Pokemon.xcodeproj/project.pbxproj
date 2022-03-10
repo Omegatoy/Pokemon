@@ -13,6 +13,8 @@
 		30260A8727D9784200A4937B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 30260A8527D9784200A4937B /* Main.storyboard */; };
 		30260A8927D9784300A4937B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 30260A8827D9784300A4937B /* Assets.xcassets */; };
 		30260A8C27D9784300A4937B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 30260A8A27D9784300A4937B /* LaunchScreen.storyboard */; };
+		305849FA27D99423002EE1D0 /* PokemonNameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 305849F827D99423002EE1D0 /* PokemonNameCell.swift */; };
+		305849FB27D99423002EE1D0 /* PokemonNameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 305849F927D99423002EE1D0 /* PokemonNameCell.xib */; };
 		D5893893FE8D2E4535048699 /* Pods_Pokemon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7ECB6FFAD68C14BBD51EB3B /* Pods_Pokemon.framework */; };
 /* End PBXBuildFile section */
 
@@ -26,6 +28,8 @@
 		30260A8827D9784300A4937B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		30260A8B27D9784300A4937B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		30260A8D27D9784300A4937B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		305849F827D99423002EE1D0 /* PokemonNameCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonNameCell.swift; sourceTree = "<group>"; };
+		305849F927D99423002EE1D0 /* PokemonNameCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PokemonNameCell.xib; sourceTree = "<group>"; };
 		3ACF8A1046DD793E2EBCFD9C /* Pods-Pokemon.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pokemon.release.xcconfig"; path = "Target Support Files/Pods-Pokemon/Pods-Pokemon.release.xcconfig"; sourceTree = "<group>"; };
 		C7ECB6FFAD68C14BBD51EB3B /* Pods_Pokemon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pokemon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -63,9 +67,10 @@
 		30260A7E27D9784200A4937B /* Pokemon */ = {
 			isa = PBXGroup;
 			children = (
+				305849F727D9940B002EE1D0 /* View */,
+				30260A9327D988AE00A4937B /* Controller */,
 				30260A7F27D9784200A4937B /* AppDelegate.swift */,
 				30260A8127D9784200A4937B /* SceneDelegate.swift */,
-				30260A8327D9784200A4937B /* ViewController.swift */,
 				30260A8527D9784200A4937B /* Main.storyboard */,
 				30260A8827D9784300A4937B /* Assets.xcassets */,
 				30260A8A27D9784300A4937B /* LaunchScreen.storyboard */,
@@ -74,13 +79,29 @@
 			path = Pokemon;
 			sourceTree = "<group>";
 		};
+		30260A9327D988AE00A4937B /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				30260A8327D9784200A4937B /* ViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		305849F727D9940B002EE1D0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				305849F827D99423002EE1D0 /* PokemonNameCell.swift */,
+				305849F927D99423002EE1D0 /* PokemonNameCell.xib */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		415EC5A36215C6CDB3DA5156 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
 				046B8C8B3FA802F2DE5B241B /* Pods-Pokemon.debug.xcconfig */,
 				3ACF8A1046DD793E2EBCFD9C /* Pods-Pokemon.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -154,6 +175,7 @@
 			files = (
 				30260A8C27D9784300A4937B /* LaunchScreen.storyboard in Resources */,
 				30260A8927D9784300A4937B /* Assets.xcassets in Resources */,
+				305849FB27D99423002EE1D0 /* PokemonNameCell.xib in Resources */,
 				30260A8727D9784200A4937B /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -209,6 +231,7 @@
 			files = (
 				30260A8427D9784200A4937B /* ViewController.swift in Sources */,
 				30260A8027D9784200A4937B /* AppDelegate.swift in Sources */,
+				305849FA27D99423002EE1D0 /* PokemonNameCell.swift in Sources */,
 				30260A8227D9784200A4937B /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
