@@ -9,15 +9,25 @@ import UIKit
 
 class PokemonNameCell: UITableViewCell {
 
+    @IBOutlet weak var pokemonNameLabel: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        
+        self.setupUI()
+        self.layoutIfNeeded()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    }
+    
+    private func setupUI() {
+        self.backgroundColor = .clear
+    }
+    
+    func configure(pokemonName: String) {
+        pokemonNameLabel.text = pokemonName.firstUppercased
     }
     
 }

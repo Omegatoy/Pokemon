@@ -8,10 +8,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Pokemon List View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Pokemon" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="PokemonListViewController" customModule="Pokemon" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -23,19 +23,19 @@
                                 </constraints>
                             </imageView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="eDW-yC-jFl">
-                                <rect key="frame" x="32" y="246" width="350" height="600"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <rect key="frame" x="0.0" y="246" width="414" height="616"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="eDW-yC-jFl" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="32" id="6wE-4e-bk5"/>
+                            <constraint firstItem="eDW-yC-jFl" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="6wE-4e-bk5"/>
                             <constraint firstItem="CO7-qe-7Lw" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="32" id="AI4-pa-VDq"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="eDW-yC-jFl" secondAttribute="trailing" constant="32" id="MIl-9D-k7U"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="eDW-yC-jFl" secondAttribute="trailing" id="MIl-9D-k7U"/>
                             <constraint firstItem="eDW-yC-jFl" firstAttribute="top" secondItem="CO7-qe-7Lw" secondAttribute="bottom" constant="40" id="QC6-Fk-xnn"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="CO7-qe-7Lw" secondAttribute="trailing" constant="32" id="T8m-6C-PKx"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="eDW-yC-jFl" secondAttribute="bottom" constant="16" id="VJE-LX-FK2"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="eDW-yC-jFl" secondAttribute="bottom" id="VJE-LX-FK2"/>
                             <constraint firstItem="CO7-qe-7Lw" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="32" id="fMs-FE-Yzb"/>
                         </constraints>
                     </view>
