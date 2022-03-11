@@ -16,6 +16,7 @@ class PokemonListViewController: UIViewController {
     
     let refreshControl = UIRefreshControl()
     var pokemonList: [PokemonList] = []
+    var pokemonInfo: PokemonInfoModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,7 +31,7 @@ class PokemonListViewController: UIViewController {
     }
     
     private func callService() {
-        requestApi { pokemonModel in
+        requestPokemonList { pokemonModel in
             self.pokemonList = pokemonModel.results.sorted(by: { $0.name < $1.name })
             self.tableView.reloadData()
         }
@@ -45,7 +46,7 @@ class PokemonListViewController: UIViewController {
         callService()
     }
     
-    private func requestApi(completionHandler: @escaping (_ pokemonModel: PokemonModel) -> ()) {
+    private func requestPokemonList(completionHandler: @escaping (_ pokemonModel: PokemonModel) -> ()) {
         guard let urlString = URL(string: "https://pokeapi.co/api/v2/pokemon") else { return }
         AF.request(urlString).responseDecodable(of: PokemonModel.self) { response in
             switch response.result {
@@ -66,7 +67,19 @@ class PokemonListViewController: UIViewController {
 //            }
 //        }
     }
-
+    
+    private func requestPokemonInfo(pokemonName: String, completionHandler: @escaping (_ pokemonModel: PokemonInfoModel) -> ()) {
+        let url = "https://pokeapi.co/api/v2/pokemon/\(pokemonName)"
+        guard let urlString = URL(string: url) else { return }
+        AF.request(urlString).responseDecodable(of: PokemonInfoModel.self) { response in
+            switch response.result {
+            case .success(let value):
+                completionHandler(value)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
 }
 
 extension PokemonListViewController: UITableViewDelegate, UITableViewDataSource {
@@ -90,7 +103,10 @@ extension PokemonListViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        requestPokemonInfo(pokemonName: self.pokemonList[indexPath.row].name) { pokemonModel in
+            self.pokemonInfo = pokemonModel
+            print(self.pokemonInfo?.sprites?.other?.home?.front_default)
+        }
     }
     
 }

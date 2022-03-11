@@ -11,12 +11,24 @@ import ObjectMapper
 class PokemonInfoModel: Mappable, Codable {
     
     var abilities: [Abilities] = []
-    var other: [Other] = [] // Pokemon Picture
+    var sprites: Sprites?
     
     required init?(map: Map) { }
         
     func mapping(map: Map) {
         self.abilities <- map["abilities"]
+        self.sprites <- map["sprites"]
+    }
+    
+}
+
+class Sprites: Mappable, Codable {
+    
+    var other: Other? // Pokemon Picture
+    
+    required init?(map: Map) { }
+    
+    func mapping(map: Map) {
         self.other <- map["other"]
     }
     
@@ -47,25 +59,25 @@ class Home: Mappable, Codable {
 }
 
 class Abilities: Mappable, Codable {
-    
+
     var ability: Ability?
-    
+
     required init?(map: Map) { }
-    
+
     func mapping(map: Map) {
         self.ability <- map["ability"]
     }
-    
+
 }
 
 class Ability : Mappable, Codable {
-    
+
     var name: String = ""
-    
+
     required init?(map: Map) { }
-    
+
     func mapping(map: Map) {
         self.name <- map["name"]
     }
-    
+
 }
