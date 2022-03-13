@@ -23,30 +23,42 @@
                                 </constraints>
                             </imageView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="eDW-yC-jFl">
-                                <rect key="frame" x="0.0" y="246" width="414" height="616"/>
+                                <rect key="frame" x="0.0" y="272" width="414" height="590"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
+                            <searchBar contentMode="redraw" placeholder="Search pokemon" translatesAutoresizingMaskIntoConstraints="NO" id="ur7-v4-aLW">
+                                <rect key="frame" x="8" y="216" width="398" height="51"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <scopeButtonTitles>
+                                    <string>Title</string>
+                                    <string>Title</string>
+                                </scopeButtonTitles>
+                            </searchBar>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="eDW-yC-jFl" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="6wE-4e-bk5"/>
+                            <constraint firstItem="ur7-v4-aLW" firstAttribute="top" secondItem="CO7-qe-7Lw" secondAttribute="bottom" constant="10" id="ADN-O9-Ee3"/>
                             <constraint firstItem="CO7-qe-7Lw" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="32" id="AI4-pa-VDq"/>
+                            <constraint firstItem="ur7-v4-aLW" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="DrN-EK-YXI"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="eDW-yC-jFl" secondAttribute="trailing" id="MIl-9D-k7U"/>
-                            <constraint firstItem="eDW-yC-jFl" firstAttribute="top" secondItem="CO7-qe-7Lw" secondAttribute="bottom" constant="40" id="QC6-Fk-xnn"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="CO7-qe-7Lw" secondAttribute="trailing" constant="32" id="T8m-6C-PKx"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="eDW-yC-jFl" secondAttribute="bottom" id="VJE-LX-FK2"/>
                             <constraint firstItem="CO7-qe-7Lw" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="32" id="fMs-FE-Yzb"/>
+                            <constraint firstItem="eDW-yC-jFl" firstAttribute="top" secondItem="ur7-v4-aLW" secondAttribute="bottom" constant="5" id="ivb-9B-gvS"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="ur7-v4-aLW" secondAttribute="trailing" constant="8" id="qe5-P1-sBd"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="logoImage" destination="CO7-qe-7Lw" id="6An-c2-1np"/>
+                        <outlet property="searchBar" destination="ur7-v4-aLW" id="MCd-5V-ItS"/>
                         <outlet property="tableView" destination="eDW-yC-jFl" id="vzu-aJ-a16"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="71" y="80"/>
+            <point key="canvasLocation" x="69.565217391304358" y="79.6875"/>
         </scene>
     </scenes>
     <resources>

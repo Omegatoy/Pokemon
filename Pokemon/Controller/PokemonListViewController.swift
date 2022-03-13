@@ -13,18 +13,22 @@ class PokemonListViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var logoImage: UIImageView!
-    
+    @IBOutlet weak var searchBar: UISearchBar!
     let refreshControl = UIRefreshControl()
     
     var offset = 0
     var isPagination = false
     var pokemonList: [PokemonList] = []
+    var allPokemonList: [PokemonList] = []
     var isFav = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setComponent()
         callService()
+        requestPokemonList(isAllPokemon: true) { pokemonModel in
+            self.allPokemonList = pokemonModel.results.filter({ !$0.name.contains("-") })
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -36,6 +40,7 @@ class PokemonListViewController: UIViewController {
     }
     
     private func setComponent() {
+        searchBar.delegate = self
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         setupUI()
         setTableView()
@@ -52,10 +57,14 @@ class PokemonListViewController: UIViewController {
     private func setupUI() {
         self.view.backgroundColor = UIColor.systemGray6
         logoImage.image = UIImage.init(named: "logo")
+        
+        searchBar.searchBarStyle = .minimal
+        searchBar.searchTextField.textColor = UIColor.black.withAlphaComponent(0.6)
     }
     
-    private func requestPokemonList(offset: Int = 0, completion: @escaping (_ pokemonModel: PokemonModel) -> Void) {
-        guard let urlString = URL(string: "https://pokeapi.co/api/v2/pokemon?offset=\(offset)&limit=20") else { return }
+    private func requestPokemonList(isAllPokemon: Bool = false, offset: Int = 0, completion: @escaping (_ pokemonModel: PokemonModel) -> Void) {
+        let url = !isAllPokemon ? "https://pokeapi.co/api/v2/pokemon?offset=\(offset)&limit=20" : "https://pokeapi.co/api/v2/pokemon?offset=0&limit=1500"
+        guard let urlString = URL(string: url) else { return }
         AF.request(urlString).responseDecodable(of: PokemonModel.self) { response in
             switch response.result {
             case .success(let value):
@@ -90,6 +99,9 @@ class PokemonListViewController: UIViewController {
     }
     
     @objc private func refresh() {
+        self.isPagination = false
+        searchBar.text = ""
+        searchBar.resignFirstResponder()
         callService()
     }
     
@@ -122,6 +134,7 @@ extension PokemonListViewController: UITableViewDelegate, UITableViewDataSource,
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        searchBar.resignFirstResponder()
         if ((scrollView.contentOffset.y + scrollView.frame.size.height) > scrollView.contentSize.height) && !isPagination {
             self.offset += 20
             self.isPagination = true
@@ -134,10 +147,27 @@ extension PokemonListViewController: UITableViewDelegate, UITableViewDataSource,
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        searchBar.resignFirstResponder()
         requestPokemonInfo(pokemonName: self.pokemonList[indexPath.row].name) { pokemonModel in
             let vc = PokemonInfoViewController()
             vc.pokemonInfo = pokemonModel
             self.present(vc, animated: true, completion: nil)
+        }
+    }
+    
+}
+
+extension PokemonListViewController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText != "" {
+            self.pokemonList = self.allPokemonList.filter { pokemonList in
+                return pokemonList.name.range(of: searchText, options: .caseInsensitive, range: nil, locale: nil) != nil
+            }
+            self.isPagination = true
+            self.tableView.reloadData()
+        } else {
+            refresh()
         }
     }
     
