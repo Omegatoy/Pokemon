@@ -17,21 +17,30 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pLS-JV-1s7">
-                        <rect key="frame" x="12" y="12" width="296" height="20"/>
+                        <rect key="frame" x="16" y="12" width="46" height="20"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="URv-PT-2iG">
+                        <rect key="frame" x="284" y="12" width="20" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="20" id="I36-bM-Cxc"/>
+                            <constraint firstAttribute="height" constant="20" id="ZZU-7Z-xvi"/>
+                        </constraints>
+                    </imageView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="pLS-JV-1s7" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="12" id="6S6-jh-dnf"/>
+                    <constraint firstItem="pLS-JV-1s7" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="6S6-jh-dnf"/>
                     <constraint firstItem="pLS-JV-1s7" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="12" id="Far-Ev-RHR"/>
                     <constraint firstAttribute="bottom" secondItem="pLS-JV-1s7" secondAttribute="bottom" constant="12" id="GtA-7i-JrR"/>
-                    <constraint firstAttribute="trailing" secondItem="pLS-JV-1s7" secondAttribute="trailing" constant="12" id="qjM-UF-AgS"/>
+                    <constraint firstItem="URv-PT-2iG" firstAttribute="centerY" secondItem="pLS-JV-1s7" secondAttribute="centerY" id="W6T-PY-eli"/>
+                    <constraint firstAttribute="trailing" secondItem="URv-PT-2iG" secondAttribute="trailing" constant="16" id="eDq-vH-QVF"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
+                <outlet property="favImageView" destination="URv-PT-2iG" id="PbB-8o-vX7"/>
                 <outlet property="pokemonNameLabel" destination="pLS-JV-1s7" id="VmW-8J-5Sv"/>
             </connections>
             <point key="canvasLocation" x="132" y="82"/>

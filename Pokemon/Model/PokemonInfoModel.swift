@@ -10,15 +10,52 @@ import ObjectMapper
 
 class PokemonInfoModel: Mappable, Codable {
     
-    var abilities: [Abilities] = []
     var sprites: Sprites?
+    var name: String = ""
+    private var height: Int = 0
+    private var weight: Int = 0
+    var types: [PokemonTypes] = []
+    
+    var cmHeight: Int {
+        return height * 10
+    }
+    
+    var kgWeight: Int {
+        return weight / 10
+    }
     
     required init?(map: Map) { }
         
     func mapping(map: Map) {
-        self.abilities <- map["abilities"]
         self.sprites <- map["sprites"]
+        self.name <- map["name"]
+        self.height <- map["height"]
+        self.weight <- map["weight"]
+        self.types <- map["types"]
     }
+    
+}
+
+class PokemonTypes: Mappable, Codable {
+    
+    var type: PokemonType?
+    
+    required init?(map: Map) { }
+    
+    func mapping(map: Map) {
+//        self.slot <- map["type"]
+//        self.pokemonType <- map["slot"]
+    }
+    
+}
+
+class PokemonType: Mappable, Codable {
+    
+    var name: String = ""
+    
+    required init?(map: Map) { }
+    
+    func mapping(map: Map) { }
     
 }
 
@@ -54,30 +91,6 @@ class Home: Mappable, Codable {
     
     func mapping(map: Map) {
         self.front_default <- map["front_default"]
-    }
-    
-}
-
-class Abilities: Mappable, Codable {
-
-    var ability: Ability?
-
-    required init?(map: Map) { }
-
-    func mapping(map: Map) {
-        self.ability <- map["ability"]
-    }
-
-}
-
-class Ability : Mappable, Codable {
-
-    var name: String = ""
-
-    required init?(map: Map) { }
-
-    func mapping(map: Map) {
-        self.name <- map["name"]
     }
 
 }
