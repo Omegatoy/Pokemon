@@ -7,6 +7,7 @@
 
 import Foundation
 import ObjectMapper
+import UIKit
 
 class PokemonModel: Mappable, Codable {
     
@@ -24,6 +25,10 @@ class PokemonList: Mappable, Codable {
     
     var name: String = ""
     var url: String = ""
+    
+    init(name: String) {
+        self.name = name
+    }
     
     required init?(map: Map) { }
     

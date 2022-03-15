@@ -3,12 +3,32 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "PokemonNameCell.favTapped():PokemonNameCell.swift">
+      </ContextState>
+      <ContextState
          contextName = "closure #1 in ViewController.requestApi():ViewController.swift">
          <PersistentStrings>
             <PersistentString
                value = "response.response?.statusCode">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "PokemonInfoViewController.setupUI():PokemonInfoViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "PokemonListViewController.searchBarSearchButtonClicked(_:):PokemonListViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "searchBar.text">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in PokemonInfoViewController.setupUI():PokemonInfoViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in PokemonListViewController.viewDidLoad():PokemonListViewController.swift">
       </ContextState>
    </ContextStates>
 </VariablesViewState>
