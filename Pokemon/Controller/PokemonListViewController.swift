@@ -14,6 +14,7 @@ class PokemonListViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var logoImage: UIImageView!
     @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var showFavImageView: UIImageView!
     let refreshControl = UIRefreshControl()
     
     var offset = 0
@@ -21,13 +22,16 @@ class PokemonListViewController: UIViewController {
     var pokemonList: [PokemonList] = []
     var allPokemonList: [PokemonList] = []
     var isFav = false
+    var isShowFav = false
+    
+    let service = ServiceApi()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setComponent()
         callService()
-        requestPokemonList(isAllPokemon: true) { pokemonModel in
-            self.allPokemonList = pokemonModel.results.filter({ !$0.name.contains("-") })
+        service.requestPokemonList(isAllPokemon: true) { pokemonModel in
+            self.allPokemonList = pokemonModel.results
         }
     }
     
@@ -40,14 +44,18 @@ class PokemonListViewController: UIViewController {
     }
     
     private func setComponent() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(showFavTapped))
+        showFavImageView.addGestureRecognizer(tap)
+        
         searchBar.delegate = self
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        
         setupUI()
         setTableView()
     }
     
     private func callService() {
-        requestPokemonList { pokemonModel in
+        service.requestPokemonList { pokemonModel in
             self.pokemonList = pokemonModel.results
             self.tableView.reloadData()
         }
@@ -58,47 +66,14 @@ class PokemonListViewController: UIViewController {
         self.view.backgroundColor = UIColor.systemGray6
         logoImage.image = UIImage.init(named: "logo")
         
+        showFavImageView.image = UIImage(named: "starfav")?.withTintColor(UIColor.red.withAlphaComponent(0.6))
+        
         searchBar.searchBarStyle = .minimal
         searchBar.searchTextField.textColor = UIColor.black.withAlphaComponent(0.6)
     }
     
-    private func requestPokemonList(isAllPokemon: Bool = false, offset: Int = 0, completion: @escaping (_ pokemonModel: PokemonModel) -> Void) {
-        let url = !isAllPokemon ? "https://pokeapi.co/api/v2/pokemon?offset=\(offset)&limit=20" : "https://pokeapi.co/api/v2/pokemon?offset=0&limit=1500"
-        guard let urlString = URL(string: url) else { return }
-        AF.request(urlString).responseDecodable(of: PokemonModel.self) { response in
-            switch response.result {
-            case .success(let value):
-                completion(value)
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }
-//        AF.request(urlString).responseJSON { response in
-//            switch response.result {
-//            case .success(let value):
-//                guard let castingValue = value as? [String: Any] else { return }
-//                guard let pokemonModel = Mapper<PokemonModel>().map(JSON: castingValue) else { return }
-//                completionHandler(pokemonModel)
-//            case .failure(let error):
-//                print(error.localizedDescription)
-//            }
-//        }
-    }
-    
-    private func requestPokemonInfo(pokemonName: String, completion: @escaping (_ pokemonModel: PokemonInfoModel) -> Void) {
-        let url = "https://pokeapi.co/api/v2/pokemon/\(pokemonName)"
-        guard let urlString = URL(string: url) else { return }
-        AF.request(urlString).responseDecodable(of: PokemonInfoModel.self) { response in
-            switch response.result {
-            case .success(let value):
-                completion(value)
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }
-    }
-    
     @objc private func refresh() {
+        self.isShowFav = false
         self.isPagination = false
         searchBar.text = ""
         searchBar.resignFirstResponder()
@@ -106,8 +81,23 @@ class PokemonListViewController: UIViewController {
     }
     
     @objc private func favTapped() {
-        tableView.reloadData()
+        if let _ = UserDefaults.standard.array(forKey: "pokemonName") {
+            tableView.reloadData()
+        } else {
+            refresh()
+        }
     }
+    
+    @objc private func showFavTapped() {
+        if let _ = UserDefaults.standard.array(forKey: "pokemonName") ,!self.isShowFav {
+            self.pokemonList = []
+            self.isShowFav = !self.isShowFav
+            tableView.reloadData()
+        } else {
+            refresh()
+        }
+    }
+    
 }
 
 extension PokemonListViewController: UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
@@ -121,16 +111,29 @@ extension PokemonListViewController: UITableViewDelegate, UITableViewDataSource,
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.pokemonList.count
+        if let favPokemon = UserDefaults.standard.array(forKey: "pokemonName") {
+            return !isShowFav ? self.pokemonList.count : favPokemon.count
+        } else {
+            return self.pokemonList.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "PokemonNameCell", for: indexPath) as! PokemonNameCell
-        if let favPokemonName = UserDefaults.standard.array(forKey: "pokemonName") {
-            self.isFav = favPokemonName.contains(where: { $0 as! String == self.pokemonList[indexPath.row].name }) ? true : false
+        if !isShowFav {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "PokemonNameCell", for: indexPath) as! PokemonNameCell
+            if let favPokemonName = UserDefaults.standard.array(forKey: "pokemonName") {
+                self.isFav = favPokemonName.contains(where: { $0 as! String == self.pokemonList[indexPath.row].name }) ? true : false
+            }
+            cell.configure(pokemonName: self.pokemonList[indexPath.row].name, isFav: self.isFav)
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "PokemonNameCell", for: indexPath) as! PokemonNameCell
+            if let favPokemonName = UserDefaults.standard.array(forKey: "pokemonName") {
+                self.pokemonList.append(PokemonList(name: favPokemonName[indexPath.row] as! String))
+                cell.configure(pokemonName: favPokemonName[indexPath.row] as! String, isFav: true)
+            }
+            return cell
         }
-        cell.configure(pokemonName: self.pokemonList[indexPath.row].name, isFav: self.isFav)
-        return cell
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -138,7 +141,7 @@ extension PokemonListViewController: UITableViewDelegate, UITableViewDataSource,
         if ((scrollView.contentOffset.y + scrollView.frame.size.height) > scrollView.contentSize.height) && !isPagination {
             self.offset += 20
             self.isPagination = true
-            self.requestPokemonList(offset: offset) { pokemonModel in
+            self.service.requestPokemonList(offset: offset) { pokemonModel in
                 self.pokemonList.append(contentsOf: pokemonModel.results)
                 self.isPagination = false
                 self.tableView.reloadData()
@@ -148,7 +151,7 @@ extension PokemonListViewController: UITableViewDelegate, UITableViewDataSource,
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         searchBar.resignFirstResponder()
-        requestPokemonInfo(pokemonName: self.pokemonList[indexPath.row].name) { pokemonModel in
+        service.requestPokemonInfo(pokemonName: self.pokemonList[indexPath.row].name) { pokemonModel in
             let vc = PokemonInfoViewController()
             vc.pokemonInfo = pokemonModel
             self.present(vc, animated: true, completion: nil)
@@ -160,6 +163,7 @@ extension PokemonListViewController: UITableViewDelegate, UITableViewDataSource,
 extension PokemonListViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        self.isShowFav = false
         if searchText != "" {
             self.pokemonList = self.allPokemonList.filter { pokemonList in
                 return pokemonList.name.range(of: searchText, options: .caseInsensitive, range: nil, locale: nil) != nil

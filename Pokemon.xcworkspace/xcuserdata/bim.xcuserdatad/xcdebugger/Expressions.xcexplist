@@ -3,6 +3,9 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "PokemonNameCell.favTapped():PokemonNameCell.swift">
+      </ContextState>
+      <ContextState
          contextName = "closure #1 in ViewController.requestApi():ViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -14,9 +17,6 @@
          contextName = "PokemonInfoViewController.setupUI():PokemonInfoViewController.swift">
       </ContextState>
       <ContextState
-         contextName = "PokemonNameCell.favTapped():PokemonNameCell.swift">
-      </ContextState>
-      <ContextState
          contextName = "PokemonListViewController.searchBarSearchButtonClicked(_:):PokemonListViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -26,6 +26,9 @@
       </ContextState>
       <ContextState
          contextName = "closure #1 in PokemonInfoViewController.setupUI():PokemonInfoViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in PokemonListViewController.viewDidLoad():PokemonListViewController.swift">
       </ContextState>
    </ContextStates>
 </VariablesViewState>
