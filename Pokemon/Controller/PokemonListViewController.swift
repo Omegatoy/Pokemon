@@ -89,7 +89,7 @@ class PokemonListViewController: UIViewController {
     }
     
     @objc private func showFavTapped() {
-        if let _ = UserDefaults.standard.array(forKey: "pokemonName") ,!self.isShowFav {
+        if let _ = UserDefaults.standard.array(forKey: "pokemonName"), !self.isShowFav {
             self.pokemonList = []
             self.isShowFav = !self.isShowFav
             tableView.reloadData()
@@ -151,10 +151,20 @@ extension PokemonListViewController: UITableViewDelegate, UITableViewDataSource,
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         searchBar.resignFirstResponder()
-        service.requestPokemonInfo(pokemonName: self.pokemonList[indexPath.row].name) { pokemonModel in
-            let vc = PokemonInfoViewController()
-            vc.pokemonInfo = pokemonModel
-            self.present(vc, animated: true, completion: nil)
+        if !isShowFav {
+            service.requestPokemonInfo(pokemonName: self.pokemonList[indexPath.row].name) { pokemonModel in
+                let vc = PokemonInfoViewController()
+                vc.pokemonInfo = pokemonModel
+                self.present(vc, animated: true, completion: nil)
+            }
+        } else {
+            if let favPokemonName = UserDefaults.standard.array(forKey: "pokemonName") {
+                service.requestPokemonInfo(pokemonName: favPokemonName[indexPath.row] as! String) { pokemonModel in
+                    let vc = PokemonInfoViewController()
+                    vc.pokemonInfo = pokemonModel
+                    self.present(vc, animated: true, completion: nil)
+                }
+            }
         }
     }
     
