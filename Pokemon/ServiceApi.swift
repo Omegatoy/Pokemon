@@ -7,8 +7,41 @@
 
 import Foundation
 import Alamofire
+import Combine
 
 class ServiceApi {
+    
+    func requestPokemonListCombine(isAllPokemon: Bool = false, offset: Int = 0) -> AnyPublisher<PokemonModel, Never> {
+        guard let url = URL(string: !isAllPokemon ? "https://pokeapi.co/api/v2/pokemon?offset=\(offset)&limit=20" : "https://pokeapi.co/api/v2/pokemon?offset=0&limit=1500") else {
+            return Just(PokemonModel()).eraseToAnyPublisher()
+        }
+        
+        let publisher = URLSession.shared.dataTaskPublisher(for: url)
+            .map({ $0.data })
+            .decode(type: PokemonModel.self, decoder: JSONDecoder())
+            .catch({ _ in
+                Just(PokemonModel(results: []))
+            })
+            .eraseToAnyPublisher()
+                    
+        return publisher
+    }
+    
+    func requestPokemonInfoCombine(pokemonName: String) -> AnyPublisher<PokemonInfoModel, Never> {
+        guard let url = URL(string: "https://pokeapi.co/api/v2/pokemon/\(pokemonName)") else {
+            return Just(PokemonInfoModel()).eraseToAnyPublisher()
+        }
+        
+        let publisher = URLSession.shared.dataTaskPublisher(for: url)
+            .map({ $0.data })
+            .decode(type: PokemonInfoModel.self, decoder: JSONDecoder())
+            .catch({ _ in
+                Just(PokemonInfoModel())
+            })
+            .eraseToAnyPublisher()
+                    
+        return publisher
+    }
     
     func requestPokemonList(isAllPokemon: Bool = false, offset: Int = 0, completion: @escaping (_ pokemonModel: PokemonModel) -> Void) {
         let url = !isAllPokemon ? "https://pokeapi.co/api/v2/pokemon?offset=\(offset)&limit=20" : "https://pokeapi.co/api/v2/pokemon?offset=0&limit=1500"

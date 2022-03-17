@@ -8,7 +8,7 @@
 import Foundation
 import ObjectMapper
 
-class PokemonInfoModel: Mappable, Codable {
+struct PokemonInfoModel: Codable {
     
     var sprites: Sprites?
     var name: String = ""
@@ -24,73 +24,42 @@ class PokemonInfoModel: Mappable, Codable {
         return weight / 10
     }
     
-    required init?(map: Map) { }
-        
-    func mapping(map: Map) {
-        self.sprites <- map["sprites"]
-        self.name <- map["name"]
-        self.height <- map["height"]
-        self.weight <- map["weight"]
-        self.types <- map["types"]
-    }
+//    init(sprites: Sprites, name: String, hegiht: Int, weight: Int, types: [PokemonTypes]) {
+//        self.sprites = sprites
+//        self.name = name
+//        self.height = hegiht
+//        self.weight = weight
+//        self.types = types
+//    }
     
 }
 
-class PokemonTypes: Mappable, Codable {
+struct PokemonTypes: Codable {
     
     var type: PokemonType?
     
-    required init?(map: Map) { }
-    
-    func mapping(map: Map) {
-//        self.slot <- map["type"]
-//        self.pokemonType <- map["slot"]
-    }
-    
 }
 
-class PokemonType: Mappable, Codable {
+struct PokemonType: Codable {
     
     var name: String = ""
     
-    required init?(map: Map) { }
-    
-    func mapping(map: Map) { }
-    
 }
 
-class Sprites: Mappable, Codable {
+struct Sprites: Codable {
     
     var other: Other? // Pokemon Picture
     
-    required init?(map: Map) { }
-    
-    func mapping(map: Map) {
-        self.other <- map["other"]
-    }
-    
 }
 
-class Other: Mappable, Codable {
+struct Other: Codable {
     
     var home: Home? // Pokemon Picture
     
-    required init?(map: Map) { }
-    
-    func mapping(map: Map) {
-        self.home <- map["home"]
-    }
-    
 }
 
-class Home: Mappable, Codable {
+struct Home: Codable {
     
     var front_default: String = "" // Pokemon Picture
-    
-    required init?(map: Map) { }
-    
-    func mapping(map: Map) {
-        self.front_default <- map["front_default"]
-    }
 
 }

@@ -8,6 +8,7 @@
 import UIKit
 import Alamofire
 import ObjectMapper
+import Combine
 
 class PokemonListViewController: UIViewController {
     
@@ -25,14 +26,21 @@ class PokemonListViewController: UIViewController {
     var isShowFav = false
     
     let service = ServiceApi()
+    var observerAll: AnyCancellable?
+    var observer: AnyCancellable?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setComponent()
         callService()
-        service.requestPokemonList(isAllPokemon: true) { pokemonModel in
+        
+        observerAll = service.requestPokemonListCombine(isAllPokemon: true).sink(receiveValue: { pokemonModel in
             self.allPokemonList = pokemonModel.results
-        }
+        })
+        
+//        service.requestPokemonList(isAllPokemon: true) { pokemonModel in
+//            self.allPokemonList = pokemonModel.results
+//        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -55,11 +63,18 @@ class PokemonListViewController: UIViewController {
     }
     
     private func callService() {
-        service.requestPokemonList { pokemonModel in
+        observer = service.requestPokemonListCombine()
+            .receive(on: DispatchQueue.main)
+            .sink { pokemonModel in
             self.pokemonList = pokemonModel.results
             self.tableView.reloadData()
         }
         self.refreshControl.endRefreshing()
+//        service.requestPokemonList { pokemonModel in
+//            self.pokemonList = pokemonModel.results
+//            self.tableView.reloadData()
+//        }
+//        self.refreshControl.endRefreshing()
     }
     
     private func setupUI() {
@@ -141,29 +156,50 @@ extension PokemonListViewController: UITableViewDelegate, UITableViewDataSource,
         if ((scrollView.contentOffset.y + scrollView.frame.size.height) > scrollView.contentSize.height) && !isPagination {
             self.offset += 20
             self.isPagination = true
-            self.service.requestPokemonList(offset: offset) { pokemonModel in
-                self.pokemonList.append(contentsOf: pokemonModel.results)
-                self.isPagination = false
-                self.tableView.reloadData()
-            }
+            observer = self.service.requestPokemonListCombine(offset: offset)
+                .receive(on: DispatchQueue.main)
+                .sink(receiveValue: { pokemonModel in
+                    self.pokemonList.append(contentsOf: pokemonModel.results)
+                    self.isPagination = false
+                    self.tableView.reloadData()
+                })
+//            self.service.requestPokemonList(offset: offset) { pokemonModel in
+//                self.pokemonList.append(contentsOf: pokemonModel.results)
+//                self.isPagination = false
+//                self.tableView.reloadData()
+//            }
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         searchBar.resignFirstResponder()
         if !isShowFav {
-            service.requestPokemonInfo(pokemonName: self.pokemonList[indexPath.row].name) { pokemonModel in
-                let vc = PokemonInfoViewController()
-                vc.pokemonInfo = pokemonModel
-                self.present(vc, animated: true, completion: nil)
-            }
-        } else {
-            if let favPokemonName = UserDefaults.standard.array(forKey: "pokemonName") {
-                service.requestPokemonInfo(pokemonName: favPokemonName[indexPath.row] as! String) { pokemonModel in
+            observer = service.requestPokemonInfoCombine(pokemonName: self.pokemonList[indexPath.row].name)
+                .receive(on: DispatchQueue.main)
+                .sink(receiveValue: { pokemonModel in
                     let vc = PokemonInfoViewController()
                     vc.pokemonInfo = pokemonModel
                     self.present(vc, animated: true, completion: nil)
-                }
+                })
+//            service.requestPokemonInfo(pokemonName: self.pokemonList[indexPath.row].name) { pokemonModel in
+//                let vc = PokemonInfoViewController()
+//                vc.pokemonInfo = pokemonModel
+//                self.present(vc, animated: true, completion: nil)
+//            }
+        } else {
+            if let favPokemonName = UserDefaults.standard.array(forKey: "pokemonName") {
+                observer = service.requestPokemonInfoCombine(pokemonName: favPokemonName[indexPath.row] as! String)
+                    .receive(on: DispatchQueue.main)
+                    .sink(receiveValue: { pokemonModel in
+                        let vc = PokemonInfoViewController()
+                        vc.pokemonInfo = pokemonModel
+                        self.present(vc, animated: true, completion: nil)
+                    })
+//                service.requestPokemonInfo(pokemonName: favPokemonName[indexPath.row] as! String) { pokemonModel in
+//                    let vc = PokemonInfoViewController()
+//                    vc.pokemonInfo = pokemonModel
+//                    self.present(vc, animated: true, completion: nil)
+//                }
             }
         }
     }
